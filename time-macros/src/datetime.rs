@@ -1,12 +1,12 @@
 use std::iter::Peekable;
 
-use proc_macro::{token_stream, Ident, Span, TokenTree};
+use proc_macro::{token_stream, TokenStream};
 
 use crate::date::Date;
 use crate::error::Error;
 use crate::offset::Offset;
 use crate::time::Time;
-use crate::to_tokens::ToTokenTree;
+use crate::to_tokens::ToTokens;
 use crate::{date, offset, time};
 
 pub(crate) struct DateTime {
@@ -33,24 +33,18 @@ pub(crate) fn parse(chars: &mut Peekable<token_stream::IntoIter>) -> Result<Date
     Ok(DateTime { date, time, offset })
 }
 
-impl ToTokenTree for DateTime {
-    fn into_token_tree(self) -> TokenTree {
+impl ToTokens for DateTime {
+    fn into_token_stream(self) -> TokenStream {
         let (type_name, maybe_offset) = match self.offset {
-            Some(offset) => (
-                Ident::new("OffsetDateTime", Span::mixed_site()),
-                quote!(.assume_offset(#(offset))),
-            ),
-            None => (
-                Ident::new("PrimitiveDateTime", Span::mixed_site()),
-                quote!(),
-            ),
+            Some(offset) => (quote!(OffsetDateTime), quote!(.assume_offset(#(offset)))),
+            None => (quote!(PrimitiveDateTime), quote!()),
         };
 
-        quote_group! {{
+        quote! {{
             const DATE_TIME: ::time::#(type_name) = ::time::PrimitiveDateTime::new(
                 #(self.date),
                 #(self.time),
-            ) #S(maybe_offset);
+            ) #(maybe_offset);
             DATE_TIME
         }}
     }

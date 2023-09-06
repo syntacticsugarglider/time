@@ -1,6 +1,7 @@
 #![deny(
     anonymous_parameters,
     clippy::all,
+    const_err,
     illegal_floating_point_literal_pattern,
     late_bound_lifetime_arguments,
     path_statements,
@@ -30,26 +31,6 @@
 )]
 #![allow(clippy::many_single_char_names)]
 
-#[cfg(not(all(
-    feature = "default",
-    feature = "alloc",
-    feature = "formatting",
-    feature = "large-dates",
-    feature = "local-offset",
-    feature = "macros",
-    feature = "parsing",
-    feature = "quickcheck",
-    feature = "serde-human-readable",
-    feature = "serde-well-known",
-    feature = "std",
-    feature = "rand",
-    feature = "serde",
-    bench,
-)))]
-compile_error!(
-    "benchmarks must be run as `RUSTFLAGS=\"--cfg bench\" cargo criterion --all-features`"
-);
-
 macro_rules! setup_benchmark {
     (
         $group_prefix:literal,
@@ -62,7 +43,7 @@ macro_rules! setup_benchmark {
         $(
             $(#[$fn_attr])*
             fn $fn_name(
-                c: &mut ::criterion::Criterion
+                c: &mut ::criterion::Criterion<::criterion_cycles_per_byte::CyclesPerByte>
             ) {
                 c.bench_function(
                     concat!($group_prefix, ": ", stringify!($fn_name)),
@@ -74,6 +55,7 @@ macro_rules! setup_benchmark {
         ::criterion::criterion_group! {
             name = benches;
             config = ::criterion::Criterion::default()
+                .with_measurement(::criterion_cycles_per_byte::CyclesPerByte)
                 // Set a stricter statistical significance threshold ("p-value")
                 // for deciding what's an actual performance change vs. noise.
                 // The more benchmarks, the lower this needs to be in order to
