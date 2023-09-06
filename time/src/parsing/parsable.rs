@@ -52,9 +52,7 @@ mod sealed {
             if self.parse_into(input, &mut parsed)?.is_empty() {
                 Ok(parsed)
             } else {
-                Err(error::Parse::ParseFromDescription(
-                    error::ParseFromDescription::UnexpectedTrailingCharacters,
-                ))
+                Err(error::Parse::UnexpectedTrailingCharacters)
             }
         }
 
@@ -432,9 +430,7 @@ impl sealed::Sealed for Rfc2822 {
         };
 
         if !input.is_empty() {
-            return Err(error::Parse::ParseFromDescription(
-                error::ParseFromDescription::UnexpectedTrailingCharacters,
-            ));
+            return Err(error::Parse::UnexpectedTrailingCharacters);
         }
 
         let mut nanosecond = 0;
@@ -666,9 +662,7 @@ impl sealed::Sealed for Rfc3339 {
         };
 
         if !input.is_empty() {
-            return Err(error::Parse::ParseFromDescription(
-                error::ParseFromDescription::UnexpectedTrailingCharacters,
-            ));
+            return Err(error::Parse::UnexpectedTrailingCharacters);
         }
 
         // The RFC explicitly permits leap seconds. We don't currently support them, so treat it as

@@ -46,5 +46,4 @@ declare_component! {
     OffsetSecond
     Ignore
     UnixTimestamp
-    End
 }

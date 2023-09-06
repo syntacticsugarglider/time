@@ -44,15 +44,6 @@ fn unexpected_trailing_characters() -> Parse {
     Time::parse("a", format_description!("")).unwrap_err()
 }
 
-// fn unexpected_trailing_characters() -> ParseFromDescription {
-//     match Time::parse("0", format_description!("[end]")) {
-//         Err(Parse::ParseFromDescription(
-//             err @ ParseFromDescription::UnexpectedTrailingCharacters { .. },
-//         )) => err,
-//         _ => panic!("unexpected result"),
-//     }
-// }
-
 fn invalid_format_description() -> InvalidFormatDescription {
     format_description::parse("[").unwrap_err()
 }
@@ -147,11 +138,8 @@ fn source() {
         Error::from(ParseFromDescription::InvalidComponent("a")),
         ParseFromDescription
     );
-    assert_source!(unexpected_trailing_characters(), ParseFromDescription);
-    assert_source!(
-        Error::from(unexpected_trailing_characters()),
-        ParseFromDescription
-    );
+    assert_source!(unexpected_trailing_characters(), None);
+    assert_source!(Error::from(unexpected_trailing_characters()), None);
     assert_source!(
         Error::from(invalid_format_description()),
         InvalidFormatDescription
@@ -175,7 +163,6 @@ fn conversion() {
     assert!(InvalidFormatDescription::try_from(Error::from(invalid_format_description())).is_ok());
     assert!(ParseFromDescription::try_from(Error::from(invalid_literal())).is_ok());
     assert!(ParseFromDescription::try_from(Parse::from(invalid_literal())).is_ok());
-    assert!(ParseFromDescription::try_from(unexpected_trailing_characters()).is_ok());
     assert!(Parse::try_from(Error::from(unexpected_trailing_characters())).is_ok());
     assert!(Parse::try_from(Error::from(invalid_literal())).is_ok());
     assert!(Parse::try_from(Error::from(TryFromParsed::InsufficientInformation)).is_ok());
@@ -192,6 +179,7 @@ fn conversion() {
     assert!(IndeterminateOffset::try_from(Error::from(ConversionRange)).is_err());
     assert!(InvalidFormatDescription::try_from(Error::from(IndeterminateOffset)).is_err());
     assert!(ParseFromDescription::try_from(Error::from(IndeterminateOffset)).is_err());
+    assert!(ParseFromDescription::try_from(unexpected_trailing_characters()).is_err());
     assert!(Parse::try_from(Error::from(IndeterminateOffset)).is_err());
     assert!(DifferentVariant::try_from(Error::from(IndeterminateOffset)).is_err());
     assert!(InvalidVariant::try_from(Error::from(IndeterminateOffset)).is_err());

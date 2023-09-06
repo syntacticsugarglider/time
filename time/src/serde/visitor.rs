@@ -181,7 +181,7 @@ impl<'a> de::Visitor<'a> for Visitor<UtcOffset> {
     }
 }
 
-impl de::Visitor<'_> for Visitor<Weekday> {
+impl<'a> de::Visitor<'a> for Visitor<Weekday> {
     type Value = Weekday;
 
     fn expecting(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -218,7 +218,7 @@ impl de::Visitor<'_> for Visitor<Weekday> {
     }
 }
 
-impl de::Visitor<'_> for Visitor<Month> {
+impl<'a> de::Visitor<'a> for Visitor<Month> {
     type Value = Month;
 
     fn expecting(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -269,7 +269,7 @@ impl de::Visitor<'_> for Visitor<Month> {
 macro_rules! well_known {
     ($article:literal, $name:literal, $($ty:tt)+) => {
         #[cfg(feature = "parsing")]
-        impl de::Visitor<'_> for Visitor<$($ty)+> {
+        impl<'a> de::Visitor<'a> for Visitor<$($ty)+> {
             type Value = OffsetDateTime;
 
             fn expecting(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {

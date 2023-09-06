@@ -190,8 +190,6 @@ macro_rules! component_definition {
                 _component_span: Span,
             ) -> Result<Self, Error>
             {
-                // rustc will complain if the modifier is empty.
-                #[allow(unused_mut)]
                 let mut this = Self {
                     $($field: None),*
                 };
@@ -282,7 +280,6 @@ component_definition! {
         Day = "day" {
             padding = "padding": Option<Padding> => padding,
         },
-        End = "end" {},
         Hour = "hour" {
             padding = "padding": Option<Padding> => padding,
             base = "repr": Option<HourBase> => is_12_hour_clock,

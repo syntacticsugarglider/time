@@ -1,6 +1,6 @@
 [package]
 name = "time"
-version = "0.3.28"
+version = "0.3.25"
 authors = ["Jacob Pratt <open-source@jhpratt.dev>", "Time contributors"]
 edition = "2021"
 rust-version = "1.67.0"
@@ -20,9 +20,6 @@ include = ["src/**/*", "LICENSE-*", "README.md"]
 
 [lib]
 bench = false
-
-[lints]
-workspace = true
 
 [package.metadata.docs.rs]
 all-features = true

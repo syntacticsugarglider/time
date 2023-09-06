@@ -51,12 +51,14 @@ macro_rules! quote_inner {
 
     // Single or double symbols
     ($ts:ident :: $($tail:tt)*) => { sym!($ts ':' ':'); quote_inner!($ts $($tail)*); };
+    ($ts:ident .. $($tail:tt)*) => { sym!($ts '.' '.'); quote_inner!($ts $($tail)*); };
     ($ts:ident : $($tail:tt)*) => { sym!($ts ':'); quote_inner!($ts $($tail)*); };
     ($ts:ident = $($tail:tt)*) => { sym!($ts '='); quote_inner!($ts $($tail)*); };
     ($ts:ident ; $($tail:tt)*) => { sym!($ts ';'); quote_inner!($ts $($tail)*); };
     ($ts:ident , $($tail:tt)*) => { sym!($ts ','); quote_inner!($ts $($tail)*); };
     ($ts:ident . $($tail:tt)*) => { sym!($ts '.'); quote_inner!($ts $($tail)*); };
     ($ts:ident & $($tail:tt)*) => { sym!($ts '&'); quote_inner!($ts $($tail)*); };
+    ($ts:ident << $($tail:tt)*) => { sym!($ts '<' '<'); quote_inner!($ts $($tail)*); };
     ($ts:ident < $($tail:tt)*) => { sym!($ts '<'); quote_inner!($ts $($tail)*); };
     ($ts:ident >> $($tail:tt)*) => { sym!($ts '>' '>'); quote_inner!($ts $($tail)*); };
     ($ts:ident > $($tail:tt)*) => { sym!($ts '>'); quote_inner!($ts $($tail)*); };

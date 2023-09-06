@@ -260,9 +260,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install toolchain
-        uses: dtolnay/rust-toolchain@nightly
-        with:
-          components: clippy
+        uses: dtolnay/rust-toolchain@stable
 
       - name: Install targets
         run: |
@@ -274,8 +272,8 @@ jobs:
           x86_64-unknown-illumos \
           wasm32-wasi
 
-      # - name: Cache cargo output
-      #   uses: Swatinem/rust-cache@v2
+      - name: Cache cargo output
+        uses: Swatinem/rust-cache@v2
 
       - name: Run clippy
         run: |
@@ -288,8 +286,7 @@ jobs:
           --target x86_64-pc-windows-gnu \
           --target x86_64-unknown-netbsd \
           --target x86_64-unknown-illumos \
-          --target wasm32-wasi \
-          -Zlints
+          --target wasm32-wasi
         env:
           RUSTFLAGS: --cfg bench
 

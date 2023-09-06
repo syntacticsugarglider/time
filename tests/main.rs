@@ -1,10 +1,38 @@
+#![deny(
+    anonymous_parameters,
+    clippy::all,
+    clippy::undocumented_unsafe_blocks,
+    illegal_floating_point_literal_pattern,
+    late_bound_lifetime_arguments,
+    path_statements,
+    patterns_in_fns_without_body,
+    rust_2018_idioms,
+    trivial_casts,
+    trivial_numeric_casts,
+    unreachable_pub,
+    unused_extern_crates
+)]
+#![warn(
+    clippy::dbg_macro,
+    clippy::decimal_literal_representation,
+    clippy::get_unwrap,
+    clippy::missing_docs_in_private_items,
+    clippy::nursery,
+    clippy::print_stdout,
+    clippy::todo,
+    clippy::unimplemented,
+    clippy::unwrap_in_result,
+    clippy::unwrap_used,
+    clippy::use_debug,
+    unused_qualifications,
+    variant_size_differences
+)]
 #![allow(
-    clippy::missing_const_for_fn, // irrelevant for tests
-    clippy::std_instead_of_core, // irrelevant for tests
-    clippy::std_instead_of_alloc, // irrelevant for tests
-    clippy::alloc_instead_of_core, // irrelevant for tests
-    clippy::cognitive_complexity, // TODO split up tests as necessary
-    clippy::unwrap_used, // TODO convert to expect or better error handling
+    clippy::clone_on_copy,
+    clippy::cmp_owned,
+    clippy::cognitive_complexity,
+    clippy::missing_const_for_fn,
+    clippy::unwrap_used
 )]
 
 #[cfg(not(all(
@@ -81,13 +109,11 @@ require_all_features! {
 
     /// Construct a non-exhaustive modifier.
     macro_rules! modifier {
-        ($name:ident $({
-            $($field:ident $(: $value:expr)?),* $(,)?
-        })?) => {{
-            // Needed for when there are no fields.
-            #[allow(unused_mut)]
+        ($name:ident {
+            $($field:ident $(: $value:expr)?),+ $(,)?
+        }) => {{
             let mut value = ::time::format_description::modifier::$name::default();
-            $($(value.$field = modifier!(@value $field $($value)?);)*)?
+            $(value.$field = modifier!(@value $field $($value)?);)+
             value
         }};
 

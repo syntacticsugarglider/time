@@ -111,7 +111,7 @@ fn iso_8601() -> time::Result<()> {
 
     assert!(
         std::panic::catch_unwind(|| {
-            let _unused = datetime!(2021-01-02 03:04:05 UTC).format(&Iso8601::PARSING);
+            let _ = datetime!(2021-01-02 03:04:05 UTC).format(&Iso8601::PARSING);
         })
         .is_err()
     );
@@ -735,13 +735,6 @@ fn first() -> time::Result<()> {
 #[test]
 fn ignore() -> time::Result<()> {
     assert_eq!(Time::MIDNIGHT.format(fd!("[ignore count:2]"))?, "");
-
-    Ok(())
-}
-
-#[test]
-fn end() -> time::Result<()> {
-    assert_eq!(Time::MIDNIGHT.format(fd!("[end]"))?, "");
 
     Ok(())
 }

@@ -13,9 +13,6 @@ pub enum ParseFromDescription {
     InvalidLiteral,
     /// A dynamic component was not valid.
     InvalidComponent(&'static str),
-    /// The input was expected to have ended, but there are characters that remain.
-    #[non_exhaustive]
-    UnexpectedTrailingCharacters,
 }
 
 impl fmt::Display for ParseFromDescription {
@@ -24,9 +21,6 @@ impl fmt::Display for ParseFromDescription {
             Self::InvalidLiteral => f.write_str("a character literal was not valid"),
             Self::InvalidComponent(name) => {
                 write!(f, "the '{name}' component could not be parsed")
-            }
-            Self::UnexpectedTrailingCharacters => {
-                f.write_str("unexpected trailing characters; the end of input was expected")
             }
         }
     }

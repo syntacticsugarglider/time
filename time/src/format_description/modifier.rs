@@ -279,13 +279,6 @@ pub struct UnixTimestamp {
     pub sign_is_mandatory: bool,
 }
 
-/// The end of input.
-///
-/// There is currently not customization for this modifier.
-#[non_exhaustive]
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct End;
-
 /// Generate the provided code if and only if `pub` is present.
 macro_rules! if_pub {
     (pub $(#[$attr:meta])*; $($x:tt)*) => {
@@ -413,6 +406,4 @@ impl_const_default! {
         precision: UnixTimestampPrecision::Second,
         sign_is_mandatory: false,
     };
-    /// Creates a modifier used to represent the end of input.
-    @pub End => End;
 }
